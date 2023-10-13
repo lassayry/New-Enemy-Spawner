@@ -2,20 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class EnemyMover : MonoBehaviour
 {
     private Transform _target;
     private float _speed;
     private float _minDistance;
+    private Vector3 _moveDirection;
 
     private void Update()
     {
-        Move(GetMoveDirection(_target));
+        SetMoveDirection(_target);
+        Move();
     }
 
-    private void Move(Vector3 moveDirection)
+    private void Move()
     {
-        transform.forward = moveDirection;
+        transform.forward = _moveDirection;
 
         if(Vector3.Distance(_target.transform.position, transform.position) > _minDistance)
         {
@@ -23,12 +25,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private Vector3 GetMoveDirection(Transform target)
+    private void SetMoveDirection(Transform target)
     {
-        Vector3 moveDirection = (target.transform.position - transform.position).normalized;
-        moveDirection.y = 0;
-
-        return moveDirection;
+        _moveDirection = (target.transform.position - transform.position).normalized;
+        _moveDirection.y = 0;
     }
 
     public void Init(Transform target, float speed, float minDistance)
